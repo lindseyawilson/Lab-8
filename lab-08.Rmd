@@ -1,7 +1,7 @@
 ---
 title: "Lab 08 - University of Edinburgh Art Collection"
-author: "Insert your name here"
-date: "Insert date here"
+author: "Lindsey Wilson"
+date: "4/20/23"
 output: github_document
 ---
 
@@ -10,31 +10,43 @@ output: github_document
 ```{r load-packages, message = FALSE}
 library(tidyverse) 
 library(skimr)
+library(robotstxt)
 ```
 
-```{r load-data, message = FALSE, eval = FALSE}
+```{r load-data, message = FALSE, eval = TRUE}
 # Remove eval = FALSE or set it to TRUE once data is ready to be loaded
 uoe_art <- read_csv("data/uoe-art.csv")
 ```
 
-### Exercise 9
+### Exercise 10
+
+Lets go ahead and wrangle our data to separate the `title` variable into `title` and `year`
 
 ```{r separate-title-date, error = TRUE}
 uoe_art <- uoe_art %>%
-  separate(title, into = c("title", "date"), sep = "\\(") %>%
+  separate(title, into = c("title", "date"), sep = "\\(" ) %>%
   mutate(year = str_remove(date, "\\)") %>% as.numeric()) %>%
-  select(title, artist, year, ___)
+  select(title, artist, year, link)
+```
+The reason we aren't concerned about the error messages here is that they all either indicate 1.) that there was extra information in the string we aren't concerned about capturing, or. 2.) that there were no parentheses at all in the string so there wasn't any date to capture. 
+
+
+### Exercise 12
+
+Let's skim our data:
+
+```{r skim}
+skim(uoe_art)
 ```
 
-### Exercise 10
+As we can see here, there are 115 pieces with artist info missing and 1431 pieces with year information missing.
 
-Remove this text, and add your answer for Exercise 10 here.
-Add code chunks as needed.
-Don't forget to label your code chunk.
-Do not use spaces in code chunk labels.
+### Exercise 13
 
-### Exercise 11
+```{r histogram}
 
-...
+ggplot(uoe_art, aes(x = year)) +
+  geom_histogram(binwidth = 10)
+```
 
 Add exercise headings as needed.
